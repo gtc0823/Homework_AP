@@ -43,22 +43,21 @@ player1 = Player(canvas, "yellow")
 player2 = Player(canvas, "blue")
 
 def handle_key(event):
-    if event.char == 'w' :
-        player1.move('u')
-    if event.char == 's' :
-        player1.move('d')
-    if event.char == 'a' :
-        player1.move('l')
-    if event.char == 'd' :
-        player1.move('r')
-    if event.char == 'i' :
-        player2.move('u')
-    if event.char == 'k' :
-        player2.move('d')
-    if event.char == 'j' :
-        player2.move('l')
-    if event.char == 'l' :
-        player2.move('r')
+    {'w' : lambda : canvas.move(player1.piece, 0, -10),
+     's' : lambda : canvas.move(player1.piece, 0, 10),
+     'a' : lambda : canvas.move(player1.piece, -10, 0),
+     'd' : lambda : canvas.move(player1.piece, 10, 0),
+     'i' : lambda : canvas.move(player2.piece, 0, -10),
+     'k' : lambda : canvas.move(player2.piece, 0, 10),
+     'j' : lambda : canvas.move(player2.piece, -10, 0),
+     'l' : lambda : canvas.move(player2.piece, 10, 0)
+     }.get(event.char, lambda:None)()
+
+    yellow_xy = canvas.bbox(player1.piece) #也可以使用放入canvas的順序ID編號 canvas.bbox(1)
+    overlapping = canvas.find_overlapping(yellow_xy[0],yellow_xy[1],yellow_xy[2],yellow_xy[3])
+
+    if player2.piece in overlapping: #player2.piece也可以使用放入canvas的順序ID編號 2
+        canvas.create_text(100, 100, font=("Arial",20), text=" 抓到了! \n 111306054 \n 資管三 \n 陳冠廷")
 
 
 canvas.bind_all("<Key>", handle_key)
